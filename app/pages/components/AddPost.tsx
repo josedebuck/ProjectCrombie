@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const AddPost = () => {
   return (
-    <div className="p-4 bg-white rounded-lg flex gap-4 justify-between text-sm">
+    <div className="p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm">
       {/* Icono Foto de Avatar */}
       <Image
         src="https://images.pexels.com/photos/29832930/pexels-photo-29832930.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
@@ -19,7 +19,11 @@ const AddPost = () => {
           <div className="w-5 h-5 cursor-pointer self-end">😄</div>
         </div>
         {/* Opciones de Post */}
-        <div className="flex items-center gap-4 mt-4 text-gray-400"></div>
+        <div className="flex items-center gap-4 mt-4 text-gray-400">
+          <div className="flex items'center gap-2 cursor-pointer">
+            Post
+          </div>
+        </div>
       </div>
     </div>
   );
