@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { IoIosMore, IoIosHeart } from "react-icons/io";
 import { FaCommentDots } from "react-icons/fa";
+import Comments from "./Comments";
 
 
 const Post = () => {
@@ -30,9 +31,9 @@ const Post = () => {
         </div>
       </div>
       {/* Interaccion */}
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-sm my-4">
         <div className="flex gap-4">
-          <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
+          <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
             <IoIosHeart 
                 width={16} 
                 height={16} 
@@ -41,7 +42,7 @@ const Post = () => {
             <span className="text-gray-300 ">|</span>
             <span className="text-gray-500">123 <span className="hidden md:inline">Likes</span></span>
           </div>
-          <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
+          <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
             <FaCommentDots 
                 width={16} 
                 height={16} 
@@ -53,6 +54,7 @@ const Post = () => {
         </div>
         <div className=""></div>
       </div>
+      <Comments/>
     </div>
   );
 };
