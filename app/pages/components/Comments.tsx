@@ -42,7 +42,7 @@ const Comments = () => {
               atque a eum quas voluptatum dolores?
             </p>
             <div className="flex items-center gap-8 text-xs text-gray-500 mt-2">
-              <div className="">
+              <div className="flex items-center gap-4">
                 <IoIosHeart
                   width={12}
                   height={12}

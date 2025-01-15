@@ -4,7 +4,7 @@ import Link from "next/link";
 import MenuMobile from "./MenuMobile";
 import { FaHome } from "react-icons/fa";
 import { BiSolidLogIn } from "react-icons/bi";
-
+import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -23,14 +23,25 @@ const Navbar = () => {
             <FaHome className="text-lg w-4 h-4" />
             <span>Home</span>
           </Link>
-          <Link href="/login" className="flex items-center gap-2">
-            <BiSolidLogIn className="text-lg w-4 h-4" />
-            <span>Login/Register</span>
-          </Link>
         </div>
       </div>
       {/* Contenido a la derecha */}
       <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
+        <ClerkLoading>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <SignedIn>
+            <div className="cursor-pointer"></div>
+            <UserButton/>
+          </SignedIn>
+          <SignedOut>
+            <Link href="/sign-in" className="flex items-center gap-2 text-sm">
+              <BiSolidLogIn className="text-lg w-4 h-4" />
+              <span>Login/Register</span>
+            </Link>
+          </SignedOut>
+        </ClerkLoaded>
         <MenuMobile />
       </div>
     </div>
