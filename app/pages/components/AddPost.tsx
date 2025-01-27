@@ -14,10 +14,11 @@ const AddPost = () => {
       {/* Post */}
       <div className="flex-1">
         {/* Text Input */}
-        <div className="flex gap-4">
+        <form className="flex gap-4">
           <textarea placeholder="¿Qué estas pensando?" className="flex-1 bg-slate-100 rounded-lg p-2"></textarea>
           <div className="w-5 h-5 cursor-pointer self-end">😄</div>
-        </div>
+
+        </form>
         {/* Opciones de Post */}
         <div className="flex items-center gap-4 mt-4 text-gray-400">
           <div className="flex items'center gap-2 cursor-pointer">
