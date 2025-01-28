@@ -1,3 +1,5 @@
+"use client";  // Esto marca el componente como cliente
+
 import { SignIn, useClerk } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
