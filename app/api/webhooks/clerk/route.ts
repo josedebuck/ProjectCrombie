@@ -3,9 +3,6 @@ import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import prisma from '@/lib/client'
 
-
-
-
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET
 
@@ -13,32 +10,29 @@ export async function POST(req: Request) {
     throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')
   }
   
-
-  // Create new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET)
 
-  // Get headers
   const headerPayload = await headers()
   const svix_id = headerPayload.get('svix-id')
   const svix_timestamp = headerPayload.get('svix-timestamp')
   const svix_signature = headerPayload.get('svix-signature')
 
-  // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
     return new Response('Error: Missing Svix headers', {
       status: 400,
     })
   }
 
-  // Get body
   const payload = await req.json()
-  const body = JSON.stringify(payload)
+
+  if (!payload || Object.keys(payload).length === 0) {
+    return new Response('Error: Empty or invalid payload', { status: 400 })
+  }
 
   let evt: WebhookEvent
 
-  // Verify payload with headers
   try {
-    evt = wh.verify(body, {
+    evt = wh.verify(JSON.stringify(payload), {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
@@ -50,50 +44,43 @@ export async function POST(req: Request) {
     })
   }
 
-  // Do something with payload
-  // For this guide, log payload to console
   const { id } = evt.data
   const eventType = evt.type
-//  console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
-//  console.log('Webhook payload:', body)
 
-  if(eventType === "user.created") {
-    try{
-
+  if (eventType === "user.created") {
+    try {
       await prisma.user.create({
         data: {
-          id:evt.data.id,
-          username: JSON.parse(body).data.username,
-          avatar: JSON.parse(body).data.image_url || "/noAvatar.png",
-          cover:"/noCover.png"
+          id: evt.data.id,
+          username: payload.data.username, // Usar directamente el payload
+          avatar: payload.data.image_url || "/noAvatar.png", // Usar directamente el payload
+          cover: "/noCover.png"
         }
       })
-      return new Response("User has been created!", {status:200})
-
-    }catch(err){
+      return new Response("User has been created!", { status: 200 })
+    } catch (err) {
       console.log(err)
-      return new Response("Failed to create the user",{status:500}) 
+      return new Response("Failed to create the user", { status: 500 })
     }
   }
 
-  if(eventType === "user.updated") {
-    try{
-
+  if (eventType === "user.updated") {
+    try {
       await prisma.user.update({
-        where:{
-          id:evt.data.id,
+        where: {
+          id: evt.data.id,
         },
         data: {
-          username: JSON.parse(body).data.username,
-          avatar: JSON.parse(body).data.image_url || "/noAvatar.png",
+          username: payload.data.username,
+          avatar: payload.data.image_url || "/noAvatar.png", 
         }
       })
-      return new Response("User has been updated!", {status:200})
-
-    }catch(err){
+      return new Response("User has been updated!", { status: 200 })
+    } catch (err) {
       console.log(err)
-      return new Response("Failed to update the user",{status:500}) 
+      return new Response("Failed to update the user", { status: 500 })
     }
   }
+
   return new Response('Webhook received', { status: 200 })
 }

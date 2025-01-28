@@ -1,6 +1,6 @@
-import Feed from "@/app/pages/components/Feed";
-import MenuLeft from "@/app/pages/components/MenuLeft";
-import MenuRight from "@/app/pages/components/MenuRight";
+import Feed from "@/app/pages/components/feed/Feed";
+import MenuLeft from "@/app/pages/components/menuLeft/MenuLeft";
+import MenuRight from "@/app/pages/components/menuRight/MenuRight";
 import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
@@ -52,7 +52,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
             </div>
 
           </div>
-          <Feed />
+          <Feed username={user.username}/>
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">

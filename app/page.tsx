@@ -1,7 +1,7 @@
 import AddPost from "./pages/components/AddPost";
-import Feed from "./pages/components/Feed";
-import MenuLeft from "./pages/components/MenuLeft";
-import MenuRight from "./pages/components/MenuRight";
+import Feed from "./pages/components/feed/Feed";
+import MenuLeft from "./pages/components/menuLeft/MenuLeft";
+import MenuRight from "./pages/components/menuRight/MenuRight";
 
 const Homepage = () => {
   return (
