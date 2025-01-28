@@ -1,3 +1,4 @@
+// Feed.tsx
 import { auth } from "@clerk/nextjs/server";
 import Post from "./Post";
 import prisma from "@/lib/client";
@@ -37,7 +38,7 @@ type Post = {
 };
 
 type FeedProps = {
-  username?: string; // Hacerlo opcional
+  username?: string; // Asegúrate de que 'username' sea opcional
 };
 
 const Feed = async ({ username }: FeedProps) => {
@@ -45,32 +46,9 @@ const Feed = async ({ username }: FeedProps) => {
 
   let posts: Post[] = [];
 
-  if (username) {
-    // Si se pasa un username, filtramos los posts de ese usuario
+  // Si el usuario está logueado, mostrar los posts de todos los usuarios
+  if (userId) {
     posts = await prisma.post.findMany({
-      where: {
-        user: {
-          username,
-        },
-      },
-      include: {
-        user: true,
-        comments: true,
-        _count: {
-          select: {
-            comments: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  } else if (userId) {
-    posts = await prisma.post.findMany({
-      where: {
-        userId,
-      },
       include: {
         user: true,
         comments: true,

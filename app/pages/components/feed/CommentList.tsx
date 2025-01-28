@@ -1,6 +1,4 @@
-"use client";
-
-import { IoIosMore } from "react-icons/io"; // Eliminar IoIosHeart si no se usa
+import { IoIosMore } from "react-icons/io"; 
 import Image from "next/image";
 import { Comment, User } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
@@ -41,11 +39,17 @@ const CommentList = ({
         createdAt: new Date(Date.now()),
       },
     });
+
     try {
+
+      const formData = new FormData();
+      formData.append("desc", desc);
+      formData.append("postId", String(postId)); 
+
       const createdComment = await addComment(postId, desc);
       setCommentState((prev) => [createdComment, ...prev]);
     } catch (err) {
-      // Manejo de errores opcional
+      // Manejo de errores
       console.error("Error al agregar el comentario", err);
     }
   };
@@ -54,6 +58,7 @@ const CommentList = ({
     commentState,
     (state, value: CommentWithUser) => [value, ...state]
   );
+
   return (
     <>
       {user && (
@@ -66,7 +71,10 @@ const CommentList = ({
             className="w-8 h-8 rounded-full"
           />
           <form
-            action={add}
+            onSubmit={(e) => {
+              e.preventDefault();
+              add();
+            }}
             className="flex items-center justify-between bg-slate-100 rounded-xl text-sm px-6 py-2 w-full"
           >
             <input
@@ -74,16 +82,15 @@ const CommentList = ({
               placeholder="Haz un comentario..."
               className="bg-transparent outline-none flex-1"
               onChange={(e) => setDesc(e.target.value)}
+              value={desc} // Asegura que el valor sea el estado
             />
             <div className="w-5 h-5 cursor-pointer self-end">😄</div>
           </form>
         </div>
       )}
-      <div className="">
-        {/* Comment */}
+      <div className="mt-6">
         {optimisticComments.map((comment) => (
           <div className="flex gap-4 justify-between mt-6" key={comment.id}>
-            {/* Avatar */}
             <Image
               src={comment.user.avatar || "/noAvatar.png"}
               alt=""
@@ -91,26 +98,18 @@ const CommentList = ({
               height={40}
               className="w-10 h-10 rounded-full"
             />
-            {/* Descripcion */}
             <div className="flex flex-col gap-2 flex-1">
               <span className="font-medium">
                 {comment.user.name && comment.user.surname
                   ? comment.user.name + " " + comment.user.surname
                   : comment.user.username}
               </span>
-              <p>
-                {comment.desc}
-              </p>
+              <p>{comment.desc}</p>
               <div className="flex items-center gap-8 text-xs text-gray-500 mt-2">
                 <div className="">Reply</div>
               </div>
             </div>
-            {/* Icono */}
-            <IoIosMore
-              width={16}
-              height={16}
-              className="cursor-pointer w-4 h-4"
-            />
+            <IoIosMore width={16} height={16} className="cursor-pointer w-4 h-4" />
           </div>
         ))}
       </div>
