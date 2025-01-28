@@ -1,3 +1,5 @@
+"use client"
+
 import { IoIosMore } from "react-icons/io"; 
 import Image from "next/image";
 import { Comment, User } from "@prisma/client";
