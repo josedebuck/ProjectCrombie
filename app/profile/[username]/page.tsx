@@ -6,7 +6,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
-  const { username } = await params;
+  const { username } = params; 
 
   const user = await prisma.user.findFirst({
     where: {
@@ -44,13 +44,12 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
             <h1 className="mt-20 mb-4 text-2xl font-medium">{user.name && user.surname ? user.name + " " + user.surname : user.username}</h1>
             <div className="flex items-center justify-center">
               <div className="flex flex-col items-center">
-              <span className="font-medium">{user._count.posts}</span>
-              <span className="text-sm">Posts</span>
+                <span className="font-medium">{user._count.posts}</span>
+                <span className="text-sm">Posts</span>
               </div>
             </div>
-
           </div>
-          <Feed username={user.username}/>
+          <Feed username={user.username} />
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">
