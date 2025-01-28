@@ -1,12 +1,18 @@
+import { notFound } from "next/navigation";
 import Feed from "@/app/pages/components/feed/Feed";
 import MenuLeft from "@/app/pages/components/menuLeft/MenuLeft";
 import MenuRight from "@/app/pages/components/menuRight/MenuRight";
 import prisma from "@/lib/client";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 
-const ProfilePage = async ({ params }: { params: { username: string } }) => {
-  const { username } = params; 
+type ProfilePageProps = {
+  params: Promise<{
+    username: string;
+  }>;
+};
+
+const ProfilePage = async ({ params }: ProfilePageProps) => {
+  const { username } = await params;
 
   const user = await prisma.user.findFirst({
     where: {
@@ -34,8 +40,8 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
             <div className="w-full h-64 relative">
               <Image src={user.cover || "/noCover.png"} alt="" fill className="object-cover" />
               <Image
-                src={user.avatar || "/noAvatar.png"}  
-                alt=""
+                src={user.avatar || "/noAvatar.png"}
+                alt="User Avatar"
                 width={128}
                 height={128}
                 className="w-32 h-32 rounded-full absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-white object-cover"
