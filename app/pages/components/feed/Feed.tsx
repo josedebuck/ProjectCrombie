@@ -14,6 +14,14 @@ type User = {
   createdAt: Date;
 };
 
+type Comment = {
+  id: number;
+  desc: string;
+  createdAt: Date;
+  postId: number;
+  userId: string;
+};
+
 type Post = {
   id: number;
   desc: string;
@@ -22,64 +30,69 @@ type Post = {
   updatedAt: Date;
   userId: string;
   user: User;
+  comments: Comment[];
   _count: {
     comments: number;
   };
 };
 
-const Feed = async ({ username }: { username?: string }) => {
+type FeedProps = {
+  username?: string; // Hacerlo opcional
+};
+
+const Feed = async ({ username }: FeedProps) => {
   const { userId } = await auth();
 
-  let posts: Post[] = [];
-
-  // If username is provided, get posts for that user
-  if (username) {
-    posts = await prisma.post.findMany({
-      where: {
-        user: {
-          username: username,
-        },
-      },
-      include: {
-        user: true,
-        _count: {
-          select: {
-            comments: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+  if (!userId) {
+    return <div className="p-4 bg-white shadow-md rounded-lg">Inicia sesión para ver el contenido.</div>;
   }
 
-  // If no username but user is authenticated
-  if (!username && userId) {
-    posts = await prisma.post.findMany({
-      where: {
-        userId: userId,
-      },
-      include: {
-        user: true,
-        _count: {
-          select: {
-            comments: true,
-          },
+  // Consulta completa con todos los campos requeridos
+  const posts: Post[] = await prisma.post.findMany({
+    where: {
+      user: username ? { username } : undefined, // Filtramos por username si está presente
+      userId: userId, // También filtramos por el userId si el usuario está logueado
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          avatar: true,
+          cover: true,
+          name: true,
+          surname: true,
+          description: true,
+          work: true,
+          createdAt: true,
         },
       },
-      orderBy: {
-        createdAt: "desc",
+      comments: {
+        select: {
+          id: true,
+          desc: true,
+          createdAt: true,
+          postId: true,
+          userId: true,
+        },
       },
-    });
-  }
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
       {posts.length ? (
         posts.map((post) => <Post key={post.id} post={post} />)
       ) : (
-        "No posts found!"
+        "No se encontraron posteos."
       )}
     </div>
   );
