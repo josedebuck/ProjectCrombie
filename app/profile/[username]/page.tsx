@@ -2,7 +2,6 @@ import Feed from "@/app/pages/components/feed/Feed";
 import MenuLeft from "@/app/pages/components/menuLeft/MenuLeft";
 import MenuRight from "@/app/pages/components/menuRight/MenuRight";
 import prisma from "@/lib/client";
-import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -24,7 +23,6 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   if (!user) return notFound();
 
-  const { userId: currentUserId } = await auth();
   return (
     <div className="flex gap-6">
       <div className="hidden xl:block wl-[20%]">

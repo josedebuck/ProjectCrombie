@@ -1,6 +1,6 @@
 "use client";
 
-import { IoIosHeart, IoIosMore } from "react-icons/io";
+import { IoIosMore } from "react-icons/io"; // Eliminar IoIosHeart si no se usa
 import Image from "next/image";
 import { Comment, User } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
@@ -44,9 +44,11 @@ const CommentList = ({
     try {
       const createdComment = await addComment(postId, desc);
       setCommentState((prev) => [createdComment, ...prev]);
-    } catch (err) {}
+    } catch (err) {
+      // Manejo de errores opcional
+      console.error("Error al agregar el comentario", err);
+    }
   };
-
 
   const [optimisticComments, addOptimisticComment] = useOptimistic(
     commentState,
@@ -105,7 +107,7 @@ const CommentList = ({
             </div>
             {/* Icono */}
             <IoIosMore
-              widths={16}
+              width={16}
               height={16}
               className="cursor-pointer w-4 h-4"
             />

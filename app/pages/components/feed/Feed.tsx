@@ -2,12 +2,37 @@ import { auth } from "@clerk/nextjs/server";
 import Post from "./Post";
 import prisma from "@/lib/client";
 
+type User = {
+  id: string;
+  username: string;
+  avatar: string | null;
+  cover: string | null;
+  name: string | null;
+  surname: string | null;
+  description: string | null;
+  work: string | null;
+  createdAt: Date;
+};
+
+type Post = {
+  id: number;
+  desc: string;
+  img: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  user: User;
+  _count: {
+    comments: number;
+  };
+};
+
 const Feed = async ({ username }: { username?: string }) => {
   const { userId } = await auth();
 
-  let posts: any[] = [];
+  let posts: Post[] = [];
 
-  // Si se proporciona un nombre de usuario, obtener los posts de ese usuario
+  // If username is provided, get posts for that user
   if (username) {
     posts = await prisma.post.findMany({
       where: {
@@ -19,7 +44,7 @@ const Feed = async ({ username }: { username?: string }) => {
         user: true,
         _count: {
           select: {
-            comments: true, // Contar solo los comentarios
+            comments: true,
           },
         },
       },
@@ -29,17 +54,17 @@ const Feed = async ({ username }: { username?: string }) => {
     });
   }
 
-  // Si no hay un nombre de usuario pero el usuario está autenticado
+  // If no username but user is authenticated
   if (!username && userId) {
     posts = await prisma.post.findMany({
       where: {
-        userId: userId, // Solo los posts del usuario autenticado
+        userId: userId,
       },
       include: {
         user: true,
         _count: {
           select: {
-            comments: true, // Contar solo los comentarios
+            comments: true,
           },
         },
       },

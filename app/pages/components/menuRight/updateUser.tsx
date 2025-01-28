@@ -7,19 +7,28 @@ import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import UpdateButton from "./UpdateButton";
 
+interface CloudinaryResult {
+  secure_url: string;
+  // Add other properties if needed
+}
+
 const UpdateUser = ({ user }: { user: User }) => {
   const [open, setOpen] = useState(false);
-  const [cover, setCover] = useState<any>(false);
+  const [cover, setCover] = useState<CloudinaryResult | null>(null);
 
-  const [state, formAction] = useActionState(updateProfile,{success:false,error:false});
+  const [state, formAction] = useActionState(updateProfile, {
+    success: false,
+    error: false,
+  });
 
   const router = useRouter();
 
   const handleClose = () => {
     setOpen(false);
-    state.success && router.refresh();
+    if (state.success) {
+      router.refresh();
+    }
   };
-
 
   return (
     <div className="">
@@ -43,30 +52,28 @@ const UpdateUser = ({ user }: { user: User }) => {
             </div>
             <CldUploadWidget
               uploadPreset="elys social media"
-              onSuccess={(result) => setCover(result.info)}
+              onSuccess={(result: any) => setCover(result.info)}
             >
-              {({ open }) => {
-                return (
-                  <div
-                    className="flex flex-col gap-4 my-4"
-                    onClick={() => open()}
-                  >
-                    <label htmlFor="">Cover Picture</label>
-                    <div className="flex items-center gap-2 cursor-pointer">
-                      <Image
-                        src={user.cover || "/noCover.png"}
-                        alt=""
-                        width={48}
-                        height={32}
-                        className="w-12 h-8 rounded-md object-cover"
-                      />
-                      <span className="text-xs underline text-gray-600">
-                        Change
-                      </span>
-                    </div>
+              {({ open }) => (
+                <div
+                  className="flex flex-col gap-4 my-4"
+                  onClick={() => open()}
+                >
+                  <label htmlFor="">Cover Picture</label>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <Image
+                      src={user.cover || "/noCover.png"}
+                      alt=""
+                      width={48}
+                      height={32}
+                      className="w-12 h-8 rounded-md object-cover"
+                    />
+                    <span className="text-xs underline text-gray-600">
+                      Change
+                    </span>
                   </div>
-                );
-              }}
+                </div>
+              )}
             </CldUploadWidget>
 
             <div className="flex flex-wrap justify-between gap-2 xl:gap-4">

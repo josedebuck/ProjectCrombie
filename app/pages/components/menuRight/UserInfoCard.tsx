@@ -1,12 +1,9 @@
 import Link from "next/link";
-import { MdOutlinePushPin, MdDateRange, MdSchool, MdLink } from "react-icons/md";
+import { MdDateRange } from "react-icons/md";
 import { FaBriefcase } from "react-icons/fa";
-import {  } from "react-icons/bs";
 import { User } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
-import prisma from "@/lib/client";
 import UpdateUser from "./updateUser";
-
 
 const UserInfoCard = async ({ user }: { user?: User }) => {
   if (!user) {
