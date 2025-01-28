@@ -43,49 +43,48 @@ type FeedProps = {
 const Feed = async ({ username }: FeedProps) => {
   const { userId } = await auth();
 
-  if (!userId) {
-    return <div className="p-4 bg-white shadow-md rounded-lg">Inicia sesión para ver el contenido.</div>;
-  }
+  let posts: Post[] = [];
 
-  // Consulta completa con todos los campos requeridos
-  const posts: Post[] = await prisma.post.findMany({
-    where: {
-      user: username ? { username } : undefined, // Filtramos por username si está presente
-      userId: userId, // También filtramos por el userId si el usuario está logueado
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          username: true,
-          avatar: true,
-          cover: true,
-          name: true,
-          surname: true,
-          description: true,
-          work: true,
-          createdAt: true,
+  if (username) {
+    // Si se pasa un username, filtramos los posts de ese usuario
+    posts = await prisma.post.findMany({
+      where: {
+        user: {
+          username,
         },
       },
-      comments: {
-        select: {
-          id: true,
-          desc: true,
-          createdAt: true,
-          postId: true,
-          userId: true,
+      include: {
+        user: true,
+        comments: true,
+        _count: {
+          select: {
+            comments: true,
+          },
         },
       },
-      _count: {
-        select: {
-          comments: true,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } else if (userId) {
+    posts = await prisma.post.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        user: true,
+        comments: true,
+        _count: {
+          select: {
+            comments: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
