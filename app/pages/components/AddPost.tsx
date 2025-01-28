@@ -17,9 +17,9 @@ const AddPost = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (desc.trim() !== "") { // Solo enviar el formulario si desc tiene texto
+    if (desc.trim() !== "") { 
       addPost(new FormData(e.target as HTMLFormElement));
-      setDesc(""); // Limpiar textarea después de enviar
+      setDesc(""); 
     }
   };
 
