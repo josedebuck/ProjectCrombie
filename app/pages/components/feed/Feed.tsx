@@ -1,7 +1,7 @@
-// Feed.tsx
 import { auth } from "@clerk/nextjs/server";
 import Post from "./Post";
 import prisma from "@/lib/client";
+import Link from "next/link";
 
 type User = {
   id: string;
@@ -67,7 +67,22 @@ const Feed = async ({ username }: FeedProps) => {
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
       {posts.length ? (
-        posts.map((post) => <Post key={post.id} post={post} />)
+        posts.map((post) => (
+          <div key={post.id}>
+            {/* Aquí envolvemos el nombre del usuario en un Link */}
+            <div className="flex items-center gap-2">
+              <Link href={`/profile/${post.user.username}`}>
+                <span className="font-medium text-blue-500 hover:underline">
+                  {post.user.name && post.user.surname
+                    ? post.user.name + " " + post.user.surname
+                    : post.user.username}
+                </span>
+              </Link>
+              {/* Aquí el resto de la info del post */}
+            </div>
+            <Post key={post.id} post={post} />
+          </div>
+        ))
       ) : (
         "No se encontraron posteos."
       )}
