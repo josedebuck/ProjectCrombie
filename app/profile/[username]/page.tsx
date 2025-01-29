@@ -31,7 +31,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   return (
     <div className="flex gap-6">
-      <div className="hidden xl:block wl-[20%]">
+      <div className="hidden xl:block w-[20%]">
         <MenuLeft type="profile" />
       </div>
       <div className="w-full lg:w-[70%] xl:w-[50%]">
@@ -55,7 +55,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               </div>
             </div>
           </div>
-          <Feed username={user.username} /> {/* Asegúrate de que username esté correctamente pasado */}
+          <Feed username={user.username} /> {/* Aquí pasamos el username */}
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">
