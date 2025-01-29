@@ -38,7 +38,7 @@ type Post = {
 };
 
 type FeedProps = {
-  username?: string; // Asegúrate de que 'username' sea opcional
+  username?: string;
 };
 
 const Feed = async ({ username }: FeedProps) => {
@@ -46,7 +46,6 @@ const Feed = async ({ username }: FeedProps) => {
 
   let posts: Post[] = [];
 
-  // Si el usuario está logueado, mostrar los posts de todos los usuarios
   if (userId) {
     posts = await prisma.post.findMany({
       include: {
@@ -74,8 +73,8 @@ const Feed = async ({ username }: FeedProps) => {
               <Link href={`/profile/${post.user.username}`}>
                 <span className="font-medium text-blue-500 hover:underline">
                   {post.user.name && post.user.surname
-                    ? post.user.name + " " + post.user.surname
-                    : post.user.username}
+                    ? post.user.name + " " + post.user.surname // Si tiene nombre y apellido, muestra eso
+                    : post.user.username}  // Si no tiene nombre completo, muestra solo el username
                 </span>
               </Link>
               {/* Aquí el resto de la info del post */}
