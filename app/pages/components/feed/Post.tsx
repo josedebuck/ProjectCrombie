@@ -8,8 +8,8 @@ import { auth } from "@clerk/nextjs/server";
 type FeedPostType = PostType & { user: User } & { _count: { comments: number } };
 
 const Post = async ({ post }: { post: FeedPostType }) => {
+  const { userId } = await auth();
 
-  const { userId } = await auth()
   return (
     <div className="flex flex-col gap-4">
       {/* Usuario */}
@@ -22,11 +22,6 @@ const Post = async ({ post }: { post: FeedPostType }) => {
             alt=""
             className="w-10 h-10 rounded-full"
           />
-          <span className="font-medium">
-            {post.user.name && post.user.surname
-              ? post.user.name + " " + post.user.surname
-              : post.user.username}
-          </span>
         </div>
         {userId === post.user.id && <PostInfo postId={post.id} />}
       </div>

@@ -64,26 +64,27 @@ const Feed = async ({ username }: FeedProps) => {
   }
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
-      {posts.length ? (
-        posts.map((post) => (
-          <div key={post.id}>
-            <div className="flex items-center gap-2">
-              <Link href={`/profile/${post.user.username}`}>
-                <span className="font-medium text-blue-500 hover:underline">
-                  {post.user.name && post.user.surname
-                    ? post.user.name + " " + post.user.surname
-                    : post.user.username}
-                </span>
-              </Link>
-            </div>
-            <Post key={post.id} post={post} />
-          </div>
-        ))
-      ) : (
-        "No se encontraron posteos."
-      )}
-    </div>
+<div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
+  {posts.length ? (
+    posts.map((post) => (
+      <div key={post.id}>
+        <div className="flex items-center gap-2">
+          <Link href={`/profile/${post.user.username}`}>
+            <span className="font-medium text-blue-500 hover:underline">
+              {post.user.name && post.user.surname
+                ? post.user.name + " " + post.user.surname
+                : post.user.username}
+            </span>
+          </Link>
+        </div>
+        <Post key={post.id} post={post} />
+      </div>
+    ))
+  ) : (
+    "No se encontraron posteos."
+  )}
+</div>
+
   );
 };
 
