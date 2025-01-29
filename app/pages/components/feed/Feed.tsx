@@ -72,8 +72,8 @@ const Feed = async ({ username }: FeedProps) => {
               <Link href={`/profile/${post.user.username}`}>
                 <span className="font-medium text-blue-500 hover:underline">
                   {post.user.name && post.user.surname
-                    ? post.user.name + " " + post.user.surname 
-                    : post.user.username}  // Si no tiene nombre completo, muestra solo el username
+                    ? post.user.name + " " + post.user.surname
+                    : post.user.username}
                 </span>
               </Link>
             </div>
