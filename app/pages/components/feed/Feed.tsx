@@ -68,16 +68,14 @@ const Feed = async ({ username }: FeedProps) => {
       {posts.length ? (
         posts.map((post) => (
           <div key={post.id}>
-            {/* Aquí envolvemos el nombre del usuario en un Link */}
             <div className="flex items-center gap-2">
               <Link href={`/profile/${post.user.username}`}>
                 <span className="font-medium text-blue-500 hover:underline">
                   {post.user.name && post.user.surname
-                    ? post.user.name + " " + post.user.surname // Si tiene nombre y apellido, muestra eso
+                    ? post.user.name + " " + post.user.surname 
                     : post.user.username}  // Si no tiene nombre completo, muestra solo el username
                 </span>
               </Link>
-              {/* Aquí el resto de la info del post */}
             </div>
             <Post key={post.id} post={post} />
           </div>
