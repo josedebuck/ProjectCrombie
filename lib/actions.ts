@@ -15,7 +15,12 @@ export const updateProfile = async (
   );
 
   console.log(fields);
+ 
+  //Validación con Zod:
 
+ // define un esquema Profile con los campos que se pueden actualizar.
+ // valida los campos mediante Profile.safeParse.
+ // si los datos no son válidos, retorna un error.
   const Profile = z.object({
     cover: z.string().optional(),
     name: z.string().max(60).optional(),

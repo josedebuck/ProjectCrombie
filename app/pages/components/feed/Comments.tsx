@@ -7,7 +7,7 @@ const Comments = async ({ postId }: { postId: number }) => {
       postId,
     },
     include: {
-      user: true,
+      user: true, 
     },
   });
 

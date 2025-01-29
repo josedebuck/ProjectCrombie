@@ -3,6 +3,8 @@ import Post from "./Post";
 import prisma from "@/lib/client";
 import Link from "next/link";
 
+// Tipos definidos:
+// tipos de TypeScript que definen la estructura de los datos utilizados
 type User = {
   id: string;
   username: string;
@@ -38,15 +40,19 @@ type Post = {
 };
 
 type FeedProps = {
-  username?: string;  // username de la persona cuyo feed vamos a mostrar
+  username?: string;  
 };
 
+// Lógica principal
+// Feed: Componente que recibe un objeto FeedProps con la propiedad opcional username
+// auth: recupera la informacion del usuario autenticado
 const Feed = async ({ username }: FeedProps) => {
   const { userId } = await auth();
 
-  let posts: Post[] = [];
+// Recupera los posteos de la base de datos con prisma  
+  let posts: Post[] = []; // Inicializa la lista de publicaciones vacía
 
-  if (userId) {
+  if (userId) { // solo busca si hay publicaciones con el usuario autenticado
     posts = await prisma.post.findMany({
       where: {
         user: username ? { username } : undefined,
@@ -66,22 +72,12 @@ const Feed = async ({ username }: FeedProps) => {
     });
   }
 
+  // renderización
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12">
       {posts.length ? (
         posts.map((post) => (
-          <div key={post.id}>
-            <div className="flex items-center gap-2">
-              <Link href={`/profile/${post.user.username}`}>
-                <span className="font-medium text-blue-500 hover:underline">
-                  {post.user.name && post.user.surname
-                    ? post.user.name + " " + post.user.surname
-                    : post.user.username}
-                </span>
-              </Link>
-            </div>
-            <Post key={post.id} post={post} />
-          </div>
+          <Post key={post.id} post={post} />
         ))
       ) : (
         "No se encontraron posteos."
