@@ -28,11 +28,9 @@ const Post = async ({ post }: { post: FeedPostType }) => {
         </div>
         {userId === post.user.id && <PostInfo postId={post.id} />}
       </div>
-      <p className="text-lg">{post.desc}</p>
-      <div className="flex items-center gap-4 text-sm my-4">
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-xl border border-gray-400 dark:border-gray-600">
-          <FaCommentDots width={16} height={16} />
-          <span className="text-gray-500 text-xs">
+      <div className="flex flex-col gap-4">
+      <p>{post.desc}</p>
+      <span className="text-gray-500 text-xs">
             {new Date(post.createdAt).toLocaleString("es-ES", {
               day: "2-digit",
               month: "2-digit",
@@ -41,14 +39,19 @@ const Post = async ({ post }: { post: FeedPostType }) => {
               minute: "2-digit",
             })}
           </span>
-        </div>
+    </div>
+      <div className="flex items-center gap-4 text-sm my-4">
+        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-xl border border-gray-400 dark:border-gray-600">
+          <FaCommentDots width={16} height={16} />
         <span className="text-gray-700 dark:text-gray-300">
           {post._count.comments} {post._count.comments === 1 ? "Comentario" : "Comentarios"}
         </span>
+        </div>
       </div>
       <Comments postId={post.id} />
     </div>
   );
 };
+
 
 export default Post;
