@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ProjectCrombie
+ProjectCrombie es una red social moderna desarrollada con Next.js, diseñada para ofrecer una experiencia fluida tanto para usuarios como para desarrolladores. Permite a los usuarios interactuar a través de publicaciones, comentarios y perfiles personalizados, todo en una plataforma de alta rendimiento.
 
-## Getting Started
+🚀 Características
+Red social interactiva: Publicaciones, comentarios y perfiles.
+Rendimiento optimizado: Usando SSR para SEO y carga rápida.
+Estilo moderno: Con Tailwind CSS para una interfaz atractiva y responsive.
+Autenticación: Integración con herramientas de autenticación como Clerk.
+🛠️ Tecnologías
+Frontend: Next.js, React, Tailwind CSS
+Backend: Node.js, API Routes
+Despliegue: Vercel
+💻 Empezando
+Requisitos
+Node.js (>=14)
+npm/yarn/pnpm
+Instalación
+Clona el repositorio y instala las dependencias:
 
-First, run the development server:
+bash
+Copiar
+Editar
+git clone https://github.com/josedebuck/ProjectCrombie.git
+cd ProjectCrombie
+npm install
+Desarrollo
+Corre el servidor de desarrollo:
 
-```bash
+bash
+Copiar
+Editar
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Visita http://localhost:3000 para ver la aplicación en tu navegador.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📦 API
+La API de ProjectCrombie está disponible en pages/api/ para facilitar la integración con otros servicios.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📝 Contribuir
+Si deseas contribuir, sigue estos pasos:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Haz un fork del repositorio.
+Crea una nueva rama (git checkout -b nombre-de-característica).
+Realiza tus cambios y haz commit (git commit -am 'Añadir nueva característica').
+Empuja los cambios (git push origin nombre-de-característica).
+Abre un pull request.
+💬 Soporte
+Si tienes algún problema o sugerencia, abre un issue en GitHub.
 
-## Learn More
+👨‍💻 Licencia
+Este proyecto está licenciado bajo la Licencia MIT.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para más información, visita el Repositorio en GitHub.
