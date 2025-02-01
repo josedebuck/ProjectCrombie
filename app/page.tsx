@@ -3,10 +3,11 @@ import Feed from "./pages/components/feed/Feed";
 import MenuLeft from "./pages/components/menuLeft/MenuLeft";
 import MenuRight from "./pages/components/menuRight/MenuRight";
 
+
 const Homepage = () => {
   return (
-    <div className="flex gap-6">
-      <div className="hidden xl:block wl-[20%]">
+    <div className="flex gap-6 pt-6">
+      <div className="hidden xl:block w-[20%]">
         <MenuLeft type="home" />
       </div>
       <div className="w-full lg:w-[70%] xl:w-[50%]">

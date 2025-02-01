@@ -19,11 +19,10 @@ const PostInfo = ({ postId }: { postId: number }) => {
         className="cursor-pointer"
       />
       {open && (
-        <div className="absolute top-4 right-0 bg-white p-4 w-32 rounded-lg flex flex-col gap-2 text-xs shadow-lg z-30">
-          <span className="cursor-pointer">View</span>
-          <span className="cursor-pointer">Re-post</span>
+        <div className="absolute top-4 right-0 bg-white dark:bg-gray-800 p-4 w-32 rounded-lg flex flex-col gap-2 text-xs shadow-lg z-30">
+          <span className="cursor-pointer text-gray-500 dark:text-gray-300">View</span>
           <form action={deletePostWithId}>
-            <button className="text-red-500">Delete</button>
+            <button className="text-red-500 dark:text-red-400">Delete</button>
           </form>
         </div>
       )}

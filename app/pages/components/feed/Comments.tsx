@@ -7,12 +7,12 @@ const Comments = async ({ postId }: { postId: number }) => {
       postId,
     },
     include: {
-      user: true, 
+      user: true,
     },
   });
 
   return (
-    <div>
+    <div className="bg-gray-50 dark:bg-gray-800 border-t-2 border-gray-300 dark:border-gray-600 pt-4">
       <CommentList comments={comments} postId={postId} />
     </div>
   );

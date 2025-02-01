@@ -17,20 +17,19 @@ const CommentList = ({
   postId: number;
 }) => {
   const { user } = useUser();
-  const [commentState, setCommentState] = useState(comments);
+  const [commentState, setCommentState] = useState(
+    [...comments].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+  );
   const [desc, setDesc] = useState("");
 
-  // Lógica para agregar comentarios
-  
   const add = async () => {
     if (!user || !desc) return;
-  // addOptimisticComment agrega un comentario ficticio al estado local antes de que se confirme en el servidor
-  // en este caso "Enviando..."
-    addOptimisticComment({
+
+    const newComment: CommentWithUser = {
       id: Math.random(),
       desc,
-      createdAt: new Date(Date.now()),
-      updatedAt: new Date(Date.now()),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       userId: user.id,
       postId: postId,
       user: {
@@ -42,26 +41,23 @@ const CommentList = ({
         name: "",
         surname: "",
         work: "",
-        createdAt: new Date(Date.now()),
+        createdAt: new Date(),
       },
-    });
+    };
 
-    // Peticion al servidor
-    // llama a AddCOmment, una funcion que envia el comentario al backend asociado al postId
-    // si la peticion sale bien actualiza el estado commentState
-    // si falla muestra error en la consola
+    addOptimisticComment(newComment);
+
     try {
       const createdComment = await addComment(postId, desc);
-      setCommentState((prev) => [createdComment, ...prev]);
+      setCommentState((prev) => [...prev, createdComment]);
     } catch (err) {
       console.error("Error al agregar el comentario", err);
     }
   };
 
-  // Hook de actualizaciones optimistas
   const [optimisticComments, addOptimisticComment] = useOptimistic(
     commentState,
-    (state, value: CommentWithUser) => [value, ...state]
+    (state, value: CommentWithUser) => [...state, value] // Se agrega al final
   );
 
   return (
@@ -73,19 +69,19 @@ const CommentList = ({
             alt="Avatar del usuario"
             width={32}
             height={32}
-            className="w-8 h-8 rounded-full"
+            className="w-10 h-10 rounded-full border border-gray-400 dark:border-gray-600"
           />
           <form
             onSubmit={(e) => {
               e.preventDefault();
               add();
             }}
-            className="flex items-center justify-between bg-slate-100 rounded-xl text-sm px-6 py-2 w-full"
+            className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 border border-gray-400 dark:border-gray-600 rounded-xl text-sm px-6 py-2 w-full"
           >
             <input
               type="text"
               placeholder="Haz un comentario..."
-              className="bg-transparent outline-none flex-1"
+              className="bg-transparent outline-none flex-1 dark:text-white"
               onChange={(e) => setDesc(e.target.value)}
               value={desc}
             />
@@ -95,26 +91,33 @@ const CommentList = ({
       )}
       <div className="mt-6">
         {optimisticComments.map((comment) => (
-          <div className="flex gap-4 justify-between mt-6" key={comment.id}>
+          <div key={comment.id} className="flex gap-4 justify-between mt-6 border-t border-gray-300 dark:border-gray-600 pt-4">
             <Image
               src={comment.user.avatar || "/noAvatar.png"}
               alt="Avatar del usuario"
               width={40}
               height={40}
-              className="w-10 h-10 rounded-full"
+              className="w-12 h-12 rounded-full border border-gray-300 dark:border-gray-500"
             />
             <div className="flex flex-col gap-2 flex-1">
-              <span className="font-medium text-blue-500 hover:underline">
-                {comment.user.name && comment.user.surname
-                  ? `${comment.user.name} ${comment.user.surname}`
-                  : comment.user.username}
-              </span>
-              <p>{comment.desc}</p>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-blue-500 hover:underline">
+                  {comment.user.username}
+                </span>
+                <span className="text-gray-500 text-xs">
+                  {new Date(comment.createdAt).toLocaleString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+              <p className="text-black dark:text-white">{comment.desc}</p>
               <div className="flex items-center gap-8 text-xs text-gray-500 mt-2">
-                <div className="">Reply</div>
               </div>
             </div>
-            <IoIosMore width={16} height={16} className="cursor-pointer w-4 h-4" />
           </div>
         ))}
       </div>
