@@ -57,7 +57,7 @@ const CommentList = ({
 
   const [optimisticComments, addOptimisticComment] = useOptimistic(
     commentState,
-    (state, value: CommentWithUser) => [...state, value] // Se agrega al final
+    (state, value: CommentWithUser) => [...state, value] 
   );
 
   return (

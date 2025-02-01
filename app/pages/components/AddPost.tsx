@@ -23,7 +23,7 @@ const AddPost = () => {
   };
 
   return (
-  <div className="p-4 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800  shadow-md rounded-lg flex gap-4 justify-between text-sm">
+  <div className="p-4  bg-white dark:bg-gray-800  shadow-md rounded-lg flex gap-4 justify-between text-sm">
   {/* Icono Foto de Avatar */}
   <Image
     src={user?.imageUrl || "/noAvatar.png"}
