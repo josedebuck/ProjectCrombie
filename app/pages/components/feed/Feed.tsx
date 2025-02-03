@@ -1,59 +1,15 @@
 import { auth } from "@clerk/nextjs/server";
+import { type Post as PostType, type FeedProps } from "./types";
 import Post from "./Post";
 import prisma from "@/lib/client";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { Suspense } from "react";
 
-// Tipos definidos:
-// tipos de TypeScript que definen la estructura de los datos utilizados
-type User = {
-  id: string;
-  username: string;
-  avatar: string | null;
-  cover: string | null;
-  name: string | null;
-  surname: string | null;
-  description: string | null;
-  work: string | null;
-  createdAt: Date;
-};
-
-type Comment = {
-  id: number;
-  desc: string;
-  createdAt: Date;
-  postId: number;
-  userId: string;
-};
-
-type Post = {
-  id: number;
-  desc: string;
-  img: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-  user: User;
-  comments: Comment[];
-  _count: {
-    comments: number;
-  };
-};
-
-type FeedProps = {
-  username?: string;  
-};
-
-// Lógica principal
-// Feed: Componente que recibe un objeto FeedProps con la propiedad opcional username
-// auth: recupera la informacion del usuario autenticado
-const Feed = async ({ username }: FeedProps) => {
-  const { userId } = await auth();
-
-// Recupera los posteos de la base de datos con prisma  
-  let posts: Post[] = []; // Inicializa la lista de publicaciones vacía
-
-  if (userId) { // solo busca si hay publicaciones con el usuario autenticado
-    posts = await prisma.post.findMany({
+async function getPosts(username?: string, userId?: string | null): Promise<PostType[]> {
+  if (!userId) return [];
+  
+  try {
+    return await prisma.post.findMany({
       where: {
         user: username ? { username } : undefined,
       },
@@ -70,20 +26,47 @@ const Feed = async ({ username }: FeedProps) => {
         createdAt: "desc",
       },
     });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
+}
+
+function PostsList({ posts }: { posts: PostType[] }) {
+  if (posts.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+        No se encontraron posteos.
+      </div>
+    );
   }
 
-  // renderización
   return (
-    <div className="p-4 bg-white dark:bg-slate-800 shadow-md rounded-lg flex flex-col gap-12 text-black dark:text-white">
-      {posts.length ? (
-        posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))
-      ) : (
-        "No se encontraron posteos."
-      )}
+    <>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+    </>
+  );
+}
+
+function LoadingFeed() {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
     </div>
   );
-};
+}
 
-export default Feed;
+export default async function Feed({ username }: FeedProps) {
+  const { userId } = await auth();
+  const posts = await getPosts(username, userId);
+
+  return (
+    <div className="p-4 bg-white dark:bg-slate-800 shadow-md rounded-lg flex flex-col gap-12 text-black dark:text-white">
+      <Suspense fallback={<LoadingFeed />}>
+        <PostsList posts={posts} />
+      </Suspense>
+    </div>
+  );
+}

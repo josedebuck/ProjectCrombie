@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const MenuMobile = () => {
-  const [isOpen, setIsOpen] = useState(false); // Función para abrir y cerrar el menú
+  const [isOpen, setIsOpen] = useState(false); 
 
   return (
     <div className="md:hidden">

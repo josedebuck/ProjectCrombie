@@ -1,6 +1,4 @@
-import Link from "next/link";
 import ProfileCard from "./ProfileCard";
-import { BsPostcardHeartFill } from "react-icons/bs";
 
 const MenuLeft = ({ type }: { type: "home" | "profile" }) => {
   return (

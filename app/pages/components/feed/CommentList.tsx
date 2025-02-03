@@ -1,70 +1,45 @@
 "use client";
 
-import { IoIosMore } from "react-icons/io";
+
 import Image from "next/image";
 import { Comment, User } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
 import { addComment } from "@/lib/actions";
 
 type CommentWithUser = Comment & { user: User };
 
-const CommentList = ({
-  comments,
-  postId,
-}: {
-  comments: CommentWithUser[];
-  postId: number;
-}) => {
+const CommentList = ({ comments, postId }: { comments: CommentWithUser[]; postId: number }) => {
+  // Obtener el usuario actual del estado de Clerk
   const { user } = useUser();
-  const [commentState, setCommentState] = useState(
-    [...comments].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-  );
+
+  // Estado para la descripci n del comentario
   const [desc, setDesc] = useState("");
 
+  // Estado para los comentarios optimistas (es decir, antes de que se guarden en la base de datos)
+  // Esta variable se utiliza para mostrar los comentarios recien agregados antes de que se guarden en la base de datos
+  const [optimisticComments, setOptimisticComments] = useState<CommentWithUser[]>(comments);
+
+  // Funcion para agregar un nuevo comentario
   const add = async () => {
     if (!user || !desc) return;
 
-    const newComment: CommentWithUser = {
-      id: Math.random(),
-      desc,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      userId: user.id,
-      postId: postId,
-      user: {
-        id: user.id,
-        username: "Enviando...",
-        avatar: user.imageUrl || "/noAvatar.png",
-        cover: "",
-        description: "",
-        name: "",
-        surname: "",
-        work: "",
-        createdAt: new Date(),
-      },
-    };
-
-    addOptimisticComment(newComment);
-
     try {
-      const createdComment = await addComment(postId, desc);
-      setCommentState((prev) => [...prev, createdComment]);
+      const newComment = await addComment(postId, desc);
+      setOptimisticComments((prev) => [...prev, newComment]);
     } catch (err) {
       console.error("Error al agregar el comentario", err);
     }
   };
 
-  const [optimisticComments, addOptimisticComment] = useOptimistic(
-    commentState,
-    (state, value: CommentWithUser) => [...state, value] 
-  );
-
   return (
+    // Si el usuario est  logueado, mostrar el formulario para agregar comentarios
+    // Si no, no mostrar nada
     <>
       {user && (
         <div className="flex items-center gap-4">
           <Image
+            // Mostrar el avatar del usuario
             src={user.imageUrl || "/noAvatar.png"}
             alt="Avatar del usuario"
             width={32}
@@ -76,16 +51,17 @@ const CommentList = ({
               e.preventDefault();
               add();
             }}
+            // Estilos para el formulario
             className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 border border-gray-400 dark:border-gray-600 rounded-xl text-sm px-6 py-2 w-full"
           >
             <input
+              // Entrada para el comentario
               type="text"
               placeholder="Haz un comentario..."
               className="bg-transparent outline-none flex-1 dark:text-white"
               onChange={(e) => setDesc(e.target.value)}
               value={desc}
             />
-            <div className="w-5 h-5 cursor-pointer self-end">😄</div>
           </form>
         </div>
       )}
@@ -93,6 +69,7 @@ const CommentList = ({
         {optimisticComments.map((comment) => (
           <div key={comment.id} className="flex gap-4 justify-between mt-6 border-t border-gray-300 dark:border-gray-600 pt-4">
             <Image
+              // Mostrar el avatar del usuario que hizo el comentario
               src={comment.user.avatar || "/noAvatar.png"}
               alt="Avatar del usuario"
               width={40}
@@ -115,8 +92,6 @@ const CommentList = ({
                 </span>
               </div>
               <p className="text-black dark:text-white">{comment.desc}</p>
-              <div className="flex items-center gap-8 text-xs text-gray-500 mt-2">
-              </div>
             </div>
           </div>
         ))}

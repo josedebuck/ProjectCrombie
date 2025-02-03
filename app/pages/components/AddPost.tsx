@@ -24,7 +24,6 @@ const AddPost = () => {
 
   return (
   <div className="p-4  bg-white dark:bg-gray-800  shadow-md rounded-lg flex gap-4 justify-between text-sm">
-  {/* Icono Foto de Avatar */}
   <Image
     src={user?.imageUrl || "/noAvatar.png"}
     alt=""
@@ -32,9 +31,7 @@ const AddPost = () => {
     height={48}
     className="w-12 h-12 object-cover rounded-full"
   />
-  {/* Post */}
   <div className="flex-1">
-    {/* Text Input */}
     <form onSubmit={handleSubmit} className="flex gap-4">
       <textarea
         placeholder="¿Qué estas pensando?"
@@ -48,7 +45,6 @@ const AddPost = () => {
         <AddPostButton />
       </div>
     </form>
-    {/* Opciones de Post */}
     <div className="flex items-center gap-4 mt-4 text-gray-400 dark:text-gray-500">
       <div className="flex items'center gap-2 cursor-pointer">Post</div>
     </div>

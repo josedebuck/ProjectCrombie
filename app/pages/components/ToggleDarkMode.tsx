@@ -6,7 +6,6 @@ const ToggleDarkMode = () => {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    // Si el contexto no está disponible, lanzar un error (esto es una medida de seguridad)
     throw new Error("ToggleDarkMode must be used within a ThemeProvider");
   }
 
